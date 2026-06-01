@@ -1,0 +1,10 @@
+.secrets/
+token.json
+*client_secret*.json
+service_account.json
+.DS_Store
+**/.DS_Store
+__pycache__/
+*.pyc
+*.mp4
+*.mov

@@ -1,0 +1,19 @@
+{
+  "service_account_path": "../.secrets/service_account.json",
+  "sheet_id": "PASTE_YOUR_SHEET_ID_HERE",
+  "worksheet": "Sheet1",
+  "columns": {
+    "pid": "PID Name",
+    "drive": "Drive Link",
+    "product_page": "Product Detail Page",
+    "claude_script": "Claude Script",
+    "feedback": "Feedback",
+    "status": "Status",
+    "count": "Count",
+    "style": "Style",
+    "avatar": "Avatar",
+    "video_output": "Video Output",
+    "job_id": "Job ID"
+  },
+  "downloads_dir": "../Ads"
+}
