@@ -4,7 +4,19 @@
 > The `ugc-ads` CORE RULE still applies: **ask before you create.**
 
 ## What this is
-The ad is **100% about the product** — a creator talking straight about how good it is, what it does, why you need it. Built for talking-head avatar tools (e.g. Higgsfield Marketing Studio: Avatar + Product).
+The ad is **100% about the product**. Product-First has several **production formats** that share the same brand voice, output format, and approval gate — they differ only in how they're shot/edited:
+
+| Format | Name | What it is | Engine |
+|--------|------|-----------|--------|
+| **A.1** | Talking Head | Creator talks straight to camera about the product | Talking-head avatar tool (e.g. Higgsfield Marketing Studio: avatar + product + TTS lip-sync) |
+| **A.2** | Split-Screen Edit | Music-driven product-flex montage in stacked split panels (no talking) | Reference-driven video model (e.g. Seedance 2.0), image refs |
+| **A.3** | Product Modelling | Product worn/used on a model, motion/showcase emphasis | TBD |
+
+Confirm which format before generating.
+
+---
+
+# A.1 — Talking Head
 
 ## Output format (always)
 Numbered segments. Each segment = one generation (≤15s on most tools). For each:
@@ -35,14 +47,48 @@ Most tools cap a clip at ~15s → **segment & stitch** (keep the same avatar + p
 6. **Compliance** — only claims the brand approved.
 
 ## Voice / language tips (learned, brand-agnostic)
-- **Match the audience's language** (e.g. a Hindi+English "Hinglish" mix for Indian creators). For mixed-language VO, the foreign-language words are usually fine; **the OTHER language's words + your brand name are the pronunciation risk** in text-to-speech.
+- **Match the audience's language** (e.g. a Hindi+English "Hinglish" mix). For mixed-language VO, the foreign-language words are usually fine; **the OTHER language's words + your brand name are the pronunciation risk** in text-to-speech.
 - **Spell the brand name the way it should sound** (e.g. split a compound brand into two words) so the TTS says it correctly. Phonetically respell any word that mis-renders; drop words that won't.
 - **Positioning words matter** — pick the framing the brand wants (e.g. "premium / affordable / value"), avoid framings it doesn't (e.g. "cheap").
 - **Don't recite the full SKU / spec dump** — keep it short, casual, Gen-Z.
 - **Add a relatable, believable use-case** (weather, commute, a daily annoyance the product fixes).
 - Keep a strong hook + a clear CTA (app / link / store).
 
-## Process — SCRIPT APPROVAL GATE
-During scripting, **show the script to the user and get approval before generating any video.**
+---
 
-*Living file — update with the hooks, angles, and voice rules that convert for your brand.*
+# A.2 — Split-Screen Edit
+
+A **music-driven product-flex montage** in a stacked split-screen layout. **No talking / no VO / no lip-sync** — visual flex cut to music, with an optional CTA text card at the end. Two common variants:
+- **2-split (studio beauty):** TOP = a model wearing the product, flex poses in a clean studio; BOTTOM = the product rotating in-hand on a neutral background.
+- **3-split (outdoor lifestyle):** TOP = model walking outdoors wearing it; MIDDLE = POV hand holding the product; BOTTOM = wide tracking shot of the model.
+
+## A.2 engine & recipe (reference-driven model, e.g. Seedance 2.0)
+- **Image references ONLY**: `image` = a model still (a bare-faced fashion model so the product can be placed on them) + `image` = a clean product shot.
+- **Describe the split IN THE PROMPT** — *not* via a video reference. Template: *"Vertical 9:16 video split into TWO/THREE equal stacked horizontal panels with thin dividing lines, all panels visible the entire time. TOP PANEL: … MIDDLE/BOTTOM PANEL: … Keep the face identical to the reference and the product identical to the product image."*
+- **Clean-start fix for 3-split:** add *"the panels are SEPARATE shots locked from the VERY FIRST FRAME; no person/object ever spans/crosses between panels"* — else the opening frame bleeds one subject across bands.
+- Params: 9:16, 720p, 15s, standard mode.
+
+## A.2 hard-won gotchas (model-agnostic, learned the hard way)
+- Some reference-driven models, **via an MCP/tool integration, accept IMAGE references only** — a **`video` reference** (to copy a reference edit) and an **`audio` reference** (to bake in music) may silently **fail**. Test image-only first.
+- ⇒ **Treat music as a POST step.** Generate silent, stitch the track in post. Many gen models won't synthesize/attach licensed music anyway.
+- The tool may pop a **preset recommendation** — decline it and generate literally.
+- Busy queues: renders can sit for minutes; **failed jobs usually aren't charged** (verify with a balance check).
+
+## A.2 models (new fashion identities)
+- Mint with an **image model** (e.g. Nano Banana Pro), **bare-faced** portraits so the gen model places the real product on them — NOT your talking-head avatars.
+- You can seed new models from face/body **reference images** (upload → pass as an `image` ref; prompt "a NEW distinct individual inspired by the reference aesthetic"). Be deliberate about skin tone / styling — models often default to a narrow look without strong prompting + a reference. **Do not replicate real, identifiable people.** Keep a reusable model library.
+
+## A.2 brand rules
+Same brand-voice rules apply to **any on-screen text / CTA card** (added in post).
+
+---
+
+# A.3 — Product Modelling *(in development)*
+Product worn/used on a model with motion + showcase emphasis. Lock the recipe after your first validated render.
+
+---
+
+## Process — SCRIPT/STORYBOARD APPROVAL GATE
+Show the script (A.1) or the shot plan (A.2/A.3) to the user and get approval before generating any video.
+
+*Living file — update with the hooks, angles, formats, and voice rules that convert for your brand.*

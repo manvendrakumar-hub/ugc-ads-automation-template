@@ -18,11 +18,48 @@ Install: drop each `skills/<name>/` folder into `~/.claude/skills/<name>/`.
 3. You review, optionally edit `Feedback`, set `Status = Approved`.
 4. **`run approved`** → agent generates `Count` video(s) in `Style` with a chosen avatar, you post-produce, it uploads finals to Drive and marks the row `Done`.
 
+## Ad formats
+Two **types**; Product-First has several **production formats**:
+
+| Code | Format | What it is | Engine |
+|------|--------|-----------|--------|
+| **A.1** | Talking Head | Creator talks to camera | Talking-head avatar tool (avatar + product + TTS lip-sync) |
+| **A.2** | Split-Screen | Music-driven product-flex montage in stacked panels (2-split studio / 3-split outdoor), no talking | Reference-driven model (image refs), e.g. Seedance 2.0 |
+| **A.3** | Product Modelling | Product worn/used on a model, showcase motion | TBD |
+| **B** | Yapping | Creator rambles a story, then pivots to product | Reference-driven model |
+
+Recipes + gotchas live in `skills/ugc-ads/product-first-ugc.md` and `yapping-ugc.md`.
+
 ## Architecture
+
+```mermaid
+flowchart TD
+    SHEET["Google Sheet<br/>(1 row per product)"]
+    subgraph BRAINS["Two Claude skills"]
+        CREATIVE["ugc-ads<br/><i>creative</i>"]
+        OPS["ugc-bot-automation<br/><i>ops</i>"]
+    end
+    subgraph GEN["Video generation"]
+        TH["Talking-head tool<br/>(A.1)"]
+        REF["Reference-driven model<br/>(A.2 / B) — image refs"]
+        IMG["Image model<br/>(avatars & fashion models)"]
+    end
+    DRIVE["Google Drive<br/>per-product folders"]
+    LOCAL["Local Ads/<br/>raw + finals"]
+
+    SHEET -->|read rows| OPS --> CREATIVE -->|script / prompt| GEN
+    DRIVE -->|input product images| OPS
+    IMG --> REF
+    GEN --> LOCAL -->|post-produced finals| DRIVE
+    OPS -->|write outputs + links| SHEET
+    OPS -. "reads: Drive MCP connector (as you)" .-> DRIVE
+    OPS -. "writes: OAuth via pipeline/gauth.py" .-> SHEET
+```
+
 - **Reads** — Google Drive MCP connector (as you) or a service account (`pipeline/sheet.py`).
 - **Writes** — **OAuth as you** (`pipeline/gauth.py`, Drive + Sheets API) — works even in locked-down Workspaces.
-- **Generation** — your video model (e.g. Higgsfield Marketing Studio for talking-head; a reference-driven model for storytelling).
-- **Glue** — shell + local `Ads/<PID>/{raw,final}/` folders.
+- **Generation** — your video models: a talking-head tool (A.1) and a reference-driven model with consistent-identity image refs (A.2/B); an image model mints avatars + fashion models.
+- **Glue** — shell + local `Ads/<product>/{raw,final}/` folders.
 
 ## Setup
 See `skills/ugc-bot-automation/RUNBOOK.md` ("Setup"). In short: enable Drive + Sheets APIs, create a **Desktop OAuth client** → `.secrets/oauth_client.json`, run `python3 -u pipeline/gauth.py login`, fill `pipeline/config.json` with your sheet id.
