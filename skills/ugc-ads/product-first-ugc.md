@@ -83,8 +83,22 @@ Same brand-voice rules apply to **any on-screen text / CTA card** (added in post
 
 ---
 
-# A.3 — Product Modelling *(in development)*
-Product worn/used on a model with motion + showcase emphasis. Lock the recipe after your first validated render.
+# A.3 — Product Modelling
+
+Cinematic **beauty/fashion showcase of the product worn on a model** — direct-to-camera, the signature "hands adjusting the product" gesture + subtle head turns. No talking; music + caption in post. Useful sub-formats (mirror whatever references you're replicating):
+- **Indoor multi-frame** — model in a store/home trying on variants, head turns to show angles (try-on feel).
+- **Outdoor cinematic jump-cuts** — single model outdoors flexing one variant, hard jump-cuts between distinct poses.
+- **Studio portrait** — premium studio, tight head-and-shoulders, elegant poses.
+
+## A.3 engine & recipe (reference-driven model, image refs — FULL-FRAME)
+- Same image-refs approach as A.2 but **full-frame, no split panels**: `image` = model still + `image` = product image. Describe the sub-format + motion in the prompt.
+- ⚠️ If your video tool was given a product through a separate "product entity" step, still pass the **product IMAGE id**, not the entity id, as the reference — entity ids can fail with "media input not found".
+- Params: 9:16, 720p, 15s.
+
+## A.3 gotcha — safety-filter false positives
+Some models' NSFW filters false-positive on **full-body "studio shoot / standing / posing model"** framing (especially youthful-looking models) — the job returns a safety-block status. **Fix:** use **tight close-up / head-and-shoulders framing** + modest, product-led wording (e.g. "eyewear product-campaign portrait, fully-clothed, elegant"); avoid words like "shoot / full-body / posing". Tight close-ups generally pass first try.
+
+*Replicating a reference (e.g. a Pinterest clip)? Match its framing and motion, but generate brand-new model identities — don't reproduce real, identifiable people.*
 
 ---
 
